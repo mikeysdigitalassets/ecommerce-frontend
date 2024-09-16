@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import Home from './components/Home';
+import Products from './components/Products';
+import Cart from './components/Cart';
+import Orders from './components/Orders';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="flex h-screen">
+        {/* Sidebar */}
+        <Sidebar />
+
+        {/* Main content area */}
+        <div className="flex flex-col w-full ml-64"> {/* Ensure space for sidebar */}
+          {/* Header */}
+          <Header />
+
+          {/* Page content */}
+          <div className="p-6 flex-grow bg-gray-100 overflow-auto">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/orders" element={<Orders />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
