@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Home from './components/Home';
-import Products from './components/Products';
+import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import Orders from './components/Orders';
 
@@ -23,7 +23,7 @@ const App = () => {
           <div className="p-6 flex-grow bg-gray-100 overflow-auto">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
+              <Route path="/products" element={<ProductList />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/orders" element={<Orders />} />
             </Routes>

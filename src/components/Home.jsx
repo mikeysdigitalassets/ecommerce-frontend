@@ -5,7 +5,7 @@ const Home = () => {
 
     return (
         <div>
-            home lorem Ipsum
+            <p>home lorem Ipsum</p>
         </div>
     )
     
