@@ -12,34 +12,30 @@ const Register = () => {
     e.preventDefault();
 
     if (!username || !email || !password) {
-      setError("All fields are required.");
-      setSuccess(null);
-      return;
+        setError("All fields are required");
+        return;
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        email,
-        password,
-      });
+        const response = await axios.post("http://localhost:5000/api/auth/register", {
+            username,
+            email,
+            password
+        });
 
-      if (response.status === 200) {
-        setSuccess("Registration successful.");
-        setError(null);
-        // Reset form fields
-        setUsername("");
-        setEmail("");
-        setPassword("");
-      } else {
-        setError("An error occurred. Please try again later.");
-        setSuccess(null);
-      }
+        if (response.status === 200) {
+            setSuccess("Registration successful");
+            setError(null);
+        }
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed.");
-      setSuccess(null);
+        if (err.response && err.response.status === 400) {
+            setError(err.response.data); // Display backend error message (e.g., "Username is already taken")
+        } else {
+            setError("An error has occurred. Please try again later.");
+        }
     }
-  };
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 w-full">
