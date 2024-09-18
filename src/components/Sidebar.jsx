@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <aside className="bg-gray-800 text-white w-64 h-screen fixed top-0 left-0 flex flex-col p-4 pt-20">
+    <aside className="bg-gray-800 text-white w-64 h-screen fixed top-0 left-0 p-4">
       {/* Navigation Links */}
       <nav className="flex flex-col">
         <Link
