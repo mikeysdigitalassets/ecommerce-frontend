@@ -1,35 +1,38 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Register = ({ user, setUser }) => {
-  const [username, setUsername] = useState("");
+const Login = ({user,setUser}) => {
+//   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
-
-  const handleRegister = async (e) => {
+  const navigate = useNavigate();
+  
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!username || !email || !password) {
+    if (!email || !password) {
         setError("All fields are required");
         return;
     }
 
     try {
-        const response = await axios.post("http://localhost:5000/api/auth/register", {
-            username,
+        const response = await axios.post("http://localhost:5000/api/auth/login", {
+            
             email,
             password
         });
 
         if (response.status === 200) {
-            setSuccess("Registration successful");
+            setSuccess("Login successfull");
             setError(null);
+            setUser(true);
+            navigate("/");
         }
     } catch (err) {
-        if (err.response && err.response.status === 400) {
+        if (err.response && err.response.status === 401) {
             setError(err.response.data); // Display backend error message (e.g., "Username is already taken")
         } else {
             setError("An error has occurred. Please try again later.");
@@ -40,14 +43,14 @@ const Register = ({ user, setUser }) => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 w-full">
-      <form onSubmit={handleRegister} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
+      <form onSubmit={handleLogin} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-white mb-4">Register</h2>
 
         {/* Display error or success message */}
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">{success}</p>}
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <input
             type="text"
             value={username}
@@ -56,7 +59,7 @@ const Register = ({ user, setUser }) => {
             className="w-full p-2 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none"
             required
           />
-        </div>
+        </div> */}
         <div className="mb-4">
           <input
             type="email"
@@ -81,11 +84,11 @@ const Register = ({ user, setUser }) => {
           type="submit"
           className="w-full py-2 mt-4 rounded bg-blue-600 hover:bg-blue-500 transition duration-300 text-white"
         >
-          Register
+          Log in!
         </button>
       </form>
     </div>
   );
 };
 
-export default Register;
+export default Login;

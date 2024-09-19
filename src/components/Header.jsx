@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+
+
+const Header = ({ user,setUser }) => {
+  // const [isReg, setIsReg] = useState(false);
+  
+  
+  
+  
   return (
+    
     <header className="bg-gray-800 text-white w-full fixed top-0 left-0 z-10 h-16 flex items-center">
       <div className="flex justify-between items-center w-full px-4">
         
@@ -13,10 +21,15 @@ const Header = () => {
 
         {/* Navigation Links (closer to the site name) */}
         <nav className="flex space-x-6 ml-8">
-          <a href="#" className="hover:text-gray-400">Home</a>
-          <a href="#" className="hover:text-gray-400">About</a>
-          <Link to="/register" href="#" className="hover:text-gray-400">Register</Link>
-          <a href="#" className="hover:text-gray-400">Contact</a>
+          <Link to="/" href="#" className="hover:text-gray-400">Home</Link>
+          <Link to="/null" href="#" className="hover:text-gray-400">About</Link>
+          {!user ? 
+          <Link to="/register" href="#" className="hover:text-gray-400">Register</Link> :
+             null }
+          <Link to="/login" href="#" className="hover:text-gray-400">Login</Link>
+          {!user ?
+          <Link to="/logout" href="#" className="hover:text-gray-400">Logout</Link>
+        : null}
         </nav>
 
         {/* Search Bar */}
