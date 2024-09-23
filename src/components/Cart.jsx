@@ -1,62 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
-const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem, onCheckout }) => {
+const Cart = ({ cartItems, setCartItems }) => {
+  const handleRemove = (productId) => {
+    // Remove item from cart
+    const updatedCart = cartItems.filter(item => item.id !== productId);
+    setCartItems(updatedCart);
+    // Save updated cart to local storage if not authenticated
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+  };
+
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
       {cartItems.length === 0 ? (
-        <p className="text-center text-gray-600">Your cart is empty</p>
+        <p>Your cart is empty.</p>
       ) : (
         <div>
-          {cartItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between py-4 border-b border-gray-200">
-              <div className="flex items-center space-x-4">
-                <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
+          <ul>
+            {cartItems.map(item => (
+              <li key={item.id} className="flex justify-between items-center p-4 bg-white shadow mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold">{item.name}</h3>
-                  <p className="text-sm text-gray-500">${item.price.toFixed(2)}</p>
+                  <h2 className="text-xl font-semibold">{item.name}</h2>
+                  <p>${item.price.toFixed(2)} x {item.quantity}</p>
                 </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none"
-                >
-                  -
-                </button>
-                <span>{item.quantity}</span>
-                <button
-                  onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                  className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none"
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => onRemoveItem(item.id)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none"
-                >
+                <button onClick={() => handleRemove(item.id)} className="text-red-500 hover:text-red-700">
                   Remove
                 </button>
-              </div>
-            </div>
-          ))}
-          <div className="flex justify-between items-center mt-6">
-            <h3 className="text-xl font-semibold">Total: ${calculateTotal().toFixed(2)}</h3>
-            <button
-              onClick={onCheckout}
-              className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
-            >
-              Checkout
-            </button>
+              </li>
+            ))}
+          </ul>
+          <div className="text-right mt-4">
+            <h2 className="text-xl font-bold">Total: ${calculateTotal()}</h2>
           </div>
         </div>
       )}
     </div>
   );
-};
+}
 
 export default Cart;
