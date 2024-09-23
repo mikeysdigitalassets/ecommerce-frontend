@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -13,18 +13,25 @@ import Logout from "./components/Logout";
 const App = () => {
   const [user, setUser] = useState(null);
   
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     
     <Router>
       <div className="flex h-[100vh] w-[100vw]">
-      {console.log(user)}
+      
         <Sidebar />
 
         {/* Main content area */}
         <div className="flex flex-col flex-grow">
           {/* Header */}
           <Header user={user} setUser={setUser} />
-
+          {/* <Logout user={user} setUser={setUser} /> */}
           {/* Page content */}
           <div className="flex-grow bg-gray-100 overflow-y-auto">
             <Routes>
@@ -34,7 +41,7 @@ const App = () => {
               <Route path="/orders" element={<Orders />} />
               <Route path="/register" element={<Register user={user} setUser={setUser} />} />
               <Route path="/login" element={<Login user={user} setUser={setUser} />} />
-              <Route path="/logout" element={<Logout user={user} setUser={setUser} />} />
+              
               {/* <Route path="/cart" element={<Cart />} /> */}
             </Routes>
           </div>
