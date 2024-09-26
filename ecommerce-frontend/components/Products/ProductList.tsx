@@ -1,9 +1,8 @@
-// components/Products/ProductList.tsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import StatusBanner from "../Structure/StatusBanner"; // Import the StatusBanner component
+import StatusBanner from "../Structure/StatusBanner"; 
 
-// Define the types for the Product and the props
+
 type Product = {
   id: number;
   name: string;
@@ -17,15 +16,15 @@ type ProductsProps = {
 
 const ProductList: React.FC<ProductsProps> = ({ addToCart }) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [bannerMessage, setBannerMessage] = useState<string>(""); // State for banner message
-  const [bannerType, setBannerType] = useState<'success' | 'error'>('success'); // State for banner type
-  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false); // State to control banner visibility
+  const [bannerMessage, setBannerMessage] = useState<string>(""); 
+  const [bannerType, setBannerType] = useState<'success' | 'error'>('success'); 
+  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false); 
   const api = 'http://localhost:5000/api/products';
 
   useEffect(() => {
     axios.get(api)
       .then(response => {
-        console.log('Fetched products:', response.data); // Log fetched products for debugging
+        console.log('Fetched products:', response.data); 
         setProducts(response.data);
       })
       .catch(error => {
@@ -68,7 +67,7 @@ const ProductList: React.FC<ProductsProps> = ({ addToCart }) => {
                 <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
                 <p className="text-gray-500 mt-1">Price: ${product.price.toFixed(2)}</p>
                 <button
-                  onClick={() => handleAddToCart(product, 1)} // Use handleAddToCart with default quantity 1
+                  onClick={() => handleAddToCart(product, 1)} 
                   className="mt-3 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
                 >
                   Add to Cart

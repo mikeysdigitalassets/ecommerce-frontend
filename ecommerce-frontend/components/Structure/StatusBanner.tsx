@@ -1,19 +1,18 @@
-// components/Structure/StatusBanner.tsx
 import React, { useEffect } from 'react';
 
 type StatusBannerProps = {
   message: string;
-  type: 'success' | 'error'; // 'success' for added, 'error' for removed
-  onClose: () => void; // Callback to hide the banner
+  type: 'success' | 'error'; 
+  onClose: () => void; 
 };
 
 const StatusBanner: React.FC<StatusBannerProps> = ({ message, type, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 3000); // Hide the banner after 3 seconds
+    }, 3000); 
 
-    return () => clearTimeout(timer); // Clear timeout if component unmounts
+    return () => clearTimeout(timer);
   }, [onClose]);
 
   return (

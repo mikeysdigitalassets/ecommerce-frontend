@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useUser } from "../Context/UserContext"; // Import useUser hook
+import { useUser } from "../Context/UserContext"; 
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { setUser } = useUser(); // Use the global user state
+  const { setUser } = useUser(); 
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,10 +26,10 @@ const Login: React.FC = () => {
       );
 
       if (response.status === 200) {
-        const userData = response.data; // Assuming the response contains user data
-        setUser(userData); // Update global user state
-        localStorage.setItem("user", JSON.stringify(userData)); // Save user data to localStorage
-        router.push("/"); // Redirect to home page
+        const userData = response.data; 
+        setUser(userData); 
+        localStorage.setItem("user", JSON.stringify(userData)); 
+        router.push("/"); 
         
         
       }
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
       <form onSubmit={handleLogin} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-white mb-4">Login</h2>
 
-        {/* Display error or success message */}
+        
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <div className="mb-4">

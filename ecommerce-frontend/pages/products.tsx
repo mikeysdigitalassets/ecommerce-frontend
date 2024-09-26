@@ -1,8 +1,7 @@
-// pages/ProductListPage.tsx
 import React, { useState, useEffect } from 'react';
-import ProductList from '../components/Products/ProductList'; // Import the ProductList component
+import ProductList from '../components/Products/ProductList'; 
 
-// Define the type for the product items in the cart
+
 type CartItem = {
   id: number;
   name: string;
@@ -13,7 +12,7 @@ type CartItem = {
 const ProductListPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // Load cart items from local storage when the component mounts (optional, if needed)
+
   useEffect(() => {
     const storedCart = localStorage.getItem('cartItems');
     if (storedCart) {
@@ -21,13 +20,13 @@ const ProductListPage: React.FC = () => {
     }
   }, []);
 
-  // Save cart items to local storage whenever they change (optional, if needed)
+
   useEffect(() => {
-    console.log('Updated cartItems:', cartItems); // Log the updated cart items state
+    console.log('Updated cartItems:', cartItems); 
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Function to add an item to the cart
+ 
   const addToCart = (product: CartItem, quantity: number): void => {
     console.log('Attempting to add product with id:', product.id);
     setCartItems((prevItems) => {
@@ -43,7 +42,7 @@ const ProductListPage: React.FC = () => {
         console.log('Updated cart items:', updatedItems);
         return updatedItems;
       } else {
-        // Add new item to cart
+        
         const newItems = [...prevItems, { ...product, quantity }];
         console.log('Adding new item to cart:', newItems);
         return newItems;

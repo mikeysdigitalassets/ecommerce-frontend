@@ -1,7 +1,6 @@
-// components/Context/CartContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-// Define the types for CartItem and CartContext
+
 type CartItem = {
   id: number;
   name: string;

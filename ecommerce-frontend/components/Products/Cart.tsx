@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-// Define the types for the CartItem and the props
+
 type CartItem = {
   id: number;
   name: string;
@@ -14,7 +14,7 @@ type CartProps = {
 };
 
 const Cart: React.FC<CartProps> = ({ cartItems, setCartItems }) => {
-  // Handle removing items from the cart
+  
   const handleRemove = (productId: number, quantityToRemove: number) => {
     setCartItems((prevItems) => {
       const updatedCart = prevItems
@@ -24,25 +24,25 @@ const Cart: React.FC<CartProps> = ({ cartItems, setCartItems }) => {
             if (newQuantity > 0) {
               return { ...item, quantity: newQuantity };
             }
-            return null; // Mark item for removal
+            return null; 
           }
           return item;
         })
-        .filter((item) => item !== null) as CartItem[]; // Remove items with null
+        .filter((item) => item !== null) as CartItem[]; 
 
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // Save to local storage
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // save to local storage
       return updatedCart;
     });
   };
 
-  // Calculate the total price of the cart items
+ 
   const calculateTotal = (): string => {
     return cartItems
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   };
 
-  // State to manage the quantity to be removed for each item
+ 
   const [quantitiesToRemove, setQuantitiesToRemove] = useState<{ [key: number]: number }>(
     () =>
       cartItems.reduce((acc, item) => {
@@ -51,7 +51,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, setCartItems }) => {
       }, {} as { [key: number]: number })
   );
 
-  // Handle quantity change
+  
   const handleQuantityChange = (productId: number, newQuantity: number) => {
     if (newQuantity >= 1) {
       setQuantitiesToRemove((prevQuantities) => ({
@@ -63,12 +63,12 @@ const Cart: React.FC<CartProps> = ({ cartItems, setCartItems }) => {
 
   return (
     <div className="flex-1 p-6 bg-blue-100 overflow-x-hidden">
-      {/* Background matching other components */}
+      
       <div
         className="container mx-auto py-8 px-4 sm:px-6 lg:px-8 max-w-full"
         style={{ marginLeft: "calc(16rem + 1rem)", maxWidth: "calc(100% - 17rem)" }}
       >
-        {/* Enhanced "Shopping Cart" Heading */}
+        
         <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 relative">
           <span className="block text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
             Shopping Cart
@@ -79,27 +79,27 @@ const Cart: React.FC<CartProps> = ({ cartItems, setCartItems }) => {
           <p className="text-center text-gray-600 text-xl">Your cart is empty.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 justify-items-center">
-            {/* Grid layout for items */}
+            
             {cartItems.map((item) => (
               <div
                 key={item.id}
                 className="bg-white shadow-md rounded-md overflow-hidden transition transform hover:scale-105 hover:shadow-lg"
-                style={{ maxWidth: "240px", margin: "0 auto" }} // Adjusted width and centered
+                style={{ maxWidth: "240px", margin: "0 auto" }} 
               >
                 <img
                   src={`https://picsum.photos/300/150?random=${Math.floor(Math.random() * 300)}`}
                   alt={item.name}
                   className="w-full h-32 object-cover"
                 />{" "}
-                {/* Adjusted image size */}
+               
                 <div className="p-4">
                   {" "}
-                  {/* Reduced padding */}
+                  
                   <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
                   <p className="text-gray-500 mt-1">Price: ${item.price.toFixed(2)}</p>
                   <p className="text-gray-500 mt-1">Quantity: {item.quantity}</p>
 
-                  {/* Quantity Updater for Removing */}
+                  
                   <div className="flex items-center mt-3">
                     <button
                       onClick={() => handleQuantityChange(item.id, quantitiesToRemove[item.id] - 1)}

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Login from "../components/User/Login"; // Adjust the import path according to your project structure
+import Login from "../components/User/Login"; 
 
 const LoginPage: React.FC = () => {
-  // Simulate user state in the parent component
+  
   
 
   return (

@@ -30,7 +30,7 @@ const Register = ({ user, setUser }) => {
         }
     } catch (err) {
         if (err.response && err.response.status === 400) {
-            setError(err.response.data); // Display backend error message (e.g., "Username is already taken")
+            setError(err.response.data); 
         } else {
             setError("An error has occurred. Please try again later.");
         }
@@ -43,7 +43,7 @@ const Register = ({ user, setUser }) => {
       <form onSubmit={handleRegister} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-white mb-4">Register</h2>
 
-        {/* Display error or success message */}
+        
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">{success}</p>}
 

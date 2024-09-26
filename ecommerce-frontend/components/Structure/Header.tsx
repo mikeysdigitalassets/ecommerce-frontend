@@ -1,15 +1,15 @@
 import React from "react";
-import Link from "next/link"; // Use Next.js Link component
+import Link from "next/link"; 
 import axios from "axios";
-import { useRouter } from "next/router"; // Use Next.js router for navigation
+import { useRouter } from "next/router"; 
 import { useUser } from '../Context/UserContext';
 
-// Define the props types for the component
+
 
 
 const Header: React.FC = () => {
   const { user, setUser } = useUser();
-  const router = useRouter(); // Use Next.js router
+  const router = useRouter(); 
 
   const handleLogout = async () => {
     try {
@@ -21,8 +21,8 @@ const Header: React.FC = () => {
   
       if (response.status === 200) {
         console.log("Logout successful");
-        setUser(null); // Clear user state
-        router.push("/"); // Redirect to home page
+        setUser(null); 
+        router.push("/"); 
       }
     } catch (error) {
       console.error("Logout failed:", error);
@@ -32,12 +32,12 @@ const Header: React.FC = () => {
   return (
     <header className="bg-gray-800 text-white w-full fixed top-0 left-0 z-10 h-16 flex items-center">
       <div className="flex justify-between items-center w-full px-4">
-        {/* Site name (aligned to the far left) */}
+        
         <div className="text-2xl font-bold">MySite</div>
 
-        {/* Navigation Links (closer to the site name) */}
+        
         <nav className="flex space-x-6 ml-8">
-          {/* Updated Link usage without <a> tags */}
+          
           <Link href="/" className="hover:text-gray-400">
             Home
           </Link>
@@ -60,7 +60,7 @@ const Header: React.FC = () => {
           )}
         </nav>
 
-        {/* Search Bar */}
+        
         <div className="relative">
           <input
             type="text"
