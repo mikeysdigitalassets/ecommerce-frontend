@@ -1,36 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Welcome to my e-commerce project! This is a learning project aimed at gaining hands-on experience with Java, Spring Boot, Next.js, and Tailwind CSS. The goal is to build a full-featured e-commerce site, incorporating common industry-standard features. By the time this project is completed, it will include:
 
-## Getting Started
+User Authentication: Secure user registration, login, and OAuth integration for streamlined access.
+Payment Integration: Support for multiple payment methods to provide flexibility for customers.
+Admin Panel: A robust admin dashboard for managing products, orders, and customer interactions.
+Customer Support Platform: A user-friendly interface for handling customer queries and support tickets.
+Responsive Design: Ensuring a seamless user experience across various devices using modern UI/UX practices with Tailwind CSS.
+This project is not just about building an application but also about exploring best practices and improving my skills in full-stack development.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tech Stack
+Frontend: Next.js, React, Tailwind CSS
+Backend: Spring Boot, Java, PostgreSQL
+Authentication: OAuth 2.0, JWT
+Deployment: To be hosted on a cloud provider with CI/CD pipelines
+Project Objectives
+Learning and Growth: To deepen my understanding of building scalable and maintainable full-stack applications.
+Real-World Functionality: Implementing features commonly found in production e-commerce applications.
+Best Practices: Applying coding standards, testing, and documentation to deliver a professional-quality project.
