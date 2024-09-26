@@ -33,7 +33,7 @@ const Header: React.FC = () => {
     <header className="bg-gray-800 text-white w-full fixed top-0 left-0 z-10 h-16 flex items-center">
       <div className="flex justify-between items-center w-full px-4">
         
-        <div className="text-2xl font-bold">MySite</div>
+        <div className="text-2xl font-bold">TechGear.com</div>
 
         
         <nav className="flex space-x-6 ml-8">
