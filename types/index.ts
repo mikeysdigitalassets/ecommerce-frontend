@@ -1,6 +1,6 @@
 
 
-// the CartItem type
+
 export type CartItem = {
     id: number;
     name: string;
@@ -8,7 +8,7 @@ export type CartItem = {
     quantity: number;
   };
   
-  // User type as an example for user context or authentication
+  
   export type User = {
     username: string;
     email: string;
@@ -17,7 +17,7 @@ export type CartItem = {
   
  
   
-  // Product type
+  
   export type Product = {
     id: number;
     name: string;

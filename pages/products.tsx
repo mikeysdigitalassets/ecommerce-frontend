@@ -55,7 +55,7 @@ const ProductListPage: React.FC = () => {
   return (
     <div>
       <h1 className="text-center text-2xl font-bold mt-4">Product List Page</h1>
-      <ProductList addToCart={addToCart} /> {/* Pass the addToCart function as a prop */}
+      <ProductList addToCart={addToCart} /> 
     </div>
   );
 };
