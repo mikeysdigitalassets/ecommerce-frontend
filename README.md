@@ -17,3 +17,9 @@ Project Objectives
 Learning and Growth: To deepen my understanding of building scalable and maintainable full-stack applications.
 Real-World Functionality: Implementing features commonly found in production e-commerce applications.
 Best Practices: Applying coding standards, testing, and documentation to deliver a professional-quality project.
+
+![image](https://github.com/user-attachments/assets/da0745a9-e0b0-44fa-bacf-13f745885df3)
+
+![image](https://github.com/user-attachments/assets/7bada2be-26bc-46a6-ab84-4d4e6985dc4e)
+
+![image](https://github.com/user-attachments/assets/dee54397-12f1-4ff4-9b67-e623e63c34d3)
