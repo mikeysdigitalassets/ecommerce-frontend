@@ -3,13 +3,21 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router"; 
 import { useUser } from '../Context/UserContext';
+import { toast, ToastOptions, TypeOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
-
-const Header: React.FC = () => {
+const Header = () => {
   const { user, setUser } = useUser();
   const router = useRouter(); 
+
+  const notify = (message: string, type: TypeOptions) => {
+    const options: ToastOptions = { type, autoClose: 5000};
+    toast(message, options);
+  }
+
+
 
   const handleLogout = async () => {
     try {
@@ -23,6 +31,7 @@ const Header: React.FC = () => {
         console.log("Logout successful");
         setUser(null); 
         router.push("/"); 
+        notify('logout successful', 'success');
       }
     } catch (error) {
       console.error("Logout failed:", error);

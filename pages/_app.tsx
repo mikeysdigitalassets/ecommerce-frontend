@@ -4,7 +4,8 @@ import Header from '../components/Structure/Header';
 import Sidebar from '../components/Structure/Sidebar';
 import { UserProvider } from '../components/Context/UserContext'; 
 import { CartProvider } from '@/components/Context/CartContext';
-
+import { ToastContainer } from 'react-toastify';  // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; 
 
 type CartItem = {
   id: number;
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </div>
         </div>
       </div>
+       <ToastContainer />
       </CartProvider>
     </UserProvider>
   );

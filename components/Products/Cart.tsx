@@ -13,7 +13,7 @@ type CartProps = {
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 };
 
-const Cart: React.FC<CartProps> = ({ cartItems, setCartItems }) => {
+const Cart = ({ cartItems, setCartItems }: CartProps) => {
   
   const handleRemove = (productId: number, quantityToRemove: number) => {
     setCartItems((prevItems) => {

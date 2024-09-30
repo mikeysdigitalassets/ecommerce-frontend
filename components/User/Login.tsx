@@ -2,13 +2,21 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useUser } from "../Context/UserContext"; 
+import { toast, ToastOptions, TypeOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Login: React.FC = () => {
+const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { setUser } = useUser(); 
+  
+  const notify = (message: string, type: TypeOptions) => {
+    const options: ToastOptions = { type, autoClose: 5000}
+    toast(message, options);
+
+  };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,8 +36,9 @@ const Login: React.FC = () => {
       if (response.status === 200) {
         const userData = response.data; 
         setUser(userData); 
-        localStorage.setItem("user", JSON.stringify(userData)); 
+        localStorage.setItem("user", JSON.stringify(userData));
         router.push("/"); 
+        notify('Login successful', 'success');
         
         
       }

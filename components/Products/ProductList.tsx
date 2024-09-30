@@ -14,7 +14,7 @@ type ProductsProps = {
   addToCart: (product: Product, quantity: number) => void;
 };
 
-const ProductList: React.FC<ProductsProps> = ({ addToCart }) => {
+const ProductList = ({ addToCart }: ProductsProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [bannerMessage, setBannerMessage] = useState<string>(""); 
   const [bannerType, setBannerType] = useState<'success' | 'error'>('success'); 

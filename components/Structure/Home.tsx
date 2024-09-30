@@ -1,7 +1,7 @@
 import React from 'react';
 import { useUser } from '../Context/UserContext'; 
 
-const Home: React.FC = () => {
+const Home = () => {
   const { user } = useUser();
 
   return (

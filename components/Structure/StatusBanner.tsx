@@ -6,7 +6,7 @@ type StatusBannerProps = {
   onClose: () => void; 
 };
 
-const StatusBanner: React.FC<StatusBannerProps> = ({ message, type, onClose }) => {
+const StatusBanner = ({ message, type, onClose }: StatusBannerProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
