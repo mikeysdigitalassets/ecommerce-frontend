@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import StatusBanner from "../Structure/StatusBanner"; 
-
+import StatusBanner from "../Structure/StatusBanner";
 
 type Product = {
   id: number;
@@ -19,6 +18,7 @@ const ProductList = ({ addToCart }: ProductsProps) => {
   const [bannerMessage, setBannerMessage] = useState<string>(""); 
   const [bannerType, setBannerType] = useState<'success' | 'error'>('success'); 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false); 
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // Track quantities per product
   const api = 'http://localhost:5000/api/products';
 
   useEffect(() => {
@@ -26,17 +26,31 @@ const ProductList = ({ addToCart }: ProductsProps) => {
       .then(response => {
         console.log('Fetched products:', response.data); 
         setProducts(response.data);
+        // Initialize quantities for each product
+        const initialQuantities = response.data.reduce((acc: { [key: number]: number }, product: Product) => {
+          acc[product.id] = 1; // Default quantity to 1
+          return acc;
+        }, {});
+        setQuantities(initialQuantities);
       })
       .catch(error => {
         console.error("There was an error fetching the product list!", error);
       });
   }, []);
 
-  const handleAddToCart = (product: Product, quantity: number) => {
+  const handleAddToCart = (product: Product) => {
+    const quantity = quantities[product.id];
     addToCart(product, quantity);
     setBannerMessage(`Added ${quantity} ${product.name} to cart successfully!`);
     setBannerType('success');
     setIsBannerVisible(true);
+  };
+
+  const handleQuantityChange = (productId: number, newQuantity: number) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [productId]: newQuantity
+    }));
   };
 
   return (
@@ -66,8 +80,20 @@ const ProductList = ({ addToCart }: ProductsProps) => {
               <div className="p-4">
                 <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
                 <p className="text-gray-500 mt-1">Price: ${product.price.toFixed(2)}</p>
+                {/* Quantity Selector */}
+                <div className="mt-2">
+                  <label htmlFor={`quantity-${product.id}`} className="text-sm text-gray-600">Quantity:</label>
+                  <input
+                    id={`quantity-${product.id}`}
+                    type="number"
+                    min="1"
+                    value={quantities[product.id]}
+                    onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))}
+                    className="border rounded w-full mt-1 px-2 py-1 text-center"
+                  />
+                </div>
                 <button
-                  onClick={() => handleAddToCart(product, 1)} 
+                  onClick={() => handleAddToCart(product)} 
                   className="mt-3 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
                 >
                   Add to Cart
