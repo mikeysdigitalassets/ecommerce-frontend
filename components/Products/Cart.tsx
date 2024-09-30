@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 type CartItem = {
   id: number;
@@ -10,9 +11,10 @@ type CartItem = {
 type CartProps = {
   cartItems: CartItem[];
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  user: any;
 };
 
-const Cart = ({ cartItems, setCartItems }: CartProps) => {
+const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   // initialize quantities for each product in the cart
   const [quantitiesToRemove, setQuantitiesToRemove] = useState<{ [key: number]: number }>(
     () =>
@@ -22,7 +24,9 @@ const Cart = ({ cartItems, setCartItems }: CartProps) => {
       }, {} as { [key: number]: number })
   );
 
-  
+  const router = useRouter();
+  const [userCheck, setUserCheck] = useState<boolean>();
+
   useEffect(() => {
     const updatedQuantities = cartItems.reduce((acc, item) => {
       acc[item.id] = quantitiesToRemove[item.id] || 1; // sets the default quant to 1
@@ -66,6 +70,15 @@ const Cart = ({ cartItems, setCartItems }: CartProps) => {
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   };
+
+  const handleCheckout = () => {
+    if (user) {
+      router.push("/checkout"); // If the user is logged in, redirect to checkout
+    } else {
+      router.push("/login?checkout=true"); // If the user is not logged in, pass `checkout=true` to the login page
+    }
+  };
+  
 
   return (
     <div className="flex-1 p-6 bg-blue-100 overflow-x-hidden">
@@ -138,7 +151,9 @@ const Cart = ({ cartItems, setCartItems }: CartProps) => {
         {cartItems.length > 0 && (
           <div className="text-right mt-8">
             <h2 className="text-3xl font-bold text-gray-800">Total: ${calculateTotal()}</h2>
-            <button className="mt-4 bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600 transition">
+            <button 
+              onClick={() => handleCheckout()}
+              className="mt-4 bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600 transition">
               Checkout
             </button>
           </div>

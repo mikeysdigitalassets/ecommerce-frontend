@@ -13,7 +13,7 @@ type UserContextType = {
 };
 
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 
 export const useUser = () => {
@@ -35,3 +35,4 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </UserContext.Provider>
   );
 };
+

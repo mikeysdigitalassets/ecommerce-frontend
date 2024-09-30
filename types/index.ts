@@ -12,8 +12,8 @@ export type CartItem = {
   export type User = {
     username: string;
     email: string;
-    
-  };
+    password?: string; // Optional if you don't want to store the password in client state
+  }
   
  
   

@@ -9,7 +9,7 @@ type CartItem = {
   quantity: number;
 };
 
-const ProductListPage: React.FC = () => {
+const ProductListPage = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
 

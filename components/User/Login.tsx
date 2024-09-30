@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useUser } from "../Context/UserContext"; 
@@ -9,13 +9,22 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [showGuestCheckout, setShowGuestCheckout] = useState<boolean>(false); // New state for showing guest checkout
   const router = useRouter();
   const { setUser } = useUser(); 
-  
-  const notify = (message: string, type: TypeOptions) => {
-    const options: ToastOptions = { type, autoClose: 5000}
-    toast(message, options);
 
+  useEffect(() => {
+    // Check if the URL has `checkout=true` in the query parameters
+    if (router.query.checkout === 'true') {
+      setShowGuestCheckout(true); // Show the "Checkout as Guest" button
+    } else {
+      setShowGuestCheckout(false); // Do not show the "Checkout as Guest" button
+    }
+  }, [router.query.checkout]);
+
+  const notify = (message: string, type: TypeOptions) => {
+    const options: ToastOptions = { type, autoClose: 5000 }
+    toast(message, options);
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,11 +45,16 @@ const Login = () => {
       if (response.status === 200) {
         const userData = response.data; 
         setUser(userData); 
-        localStorage.setItem("user", JSON.stringify(userData));
-        router.push("/"); 
+        localStorage.setItem("user", JSON.stringify(userData)); 
         notify('Login successful', 'success');
-        
-        
+
+        if (router.query.checkout === 'true') {
+          router.push("/checkout");
+        } else {
+          router.push("/");
+        }
+      
+
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -48,12 +62,16 @@ const Login = () => {
     }
   };
 
+  // Handler for guest checkout
+  const handleGuestCheckout = () => {
+    router.push("/checkout/guest"); // Redirect to a guest checkout flow
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 w-full">
       <form onSubmit={handleLogin} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-white mb-4">Login</h2>
 
-        
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <div className="mb-4">
@@ -82,6 +100,20 @@ const Login = () => {
         >
           Log in!
         </button>
+
+        {/* Conditionally show the "Checkout as Guest" button */}
+        {showGuestCheckout && (
+          <div className="text-center mt-6">
+            <p className="text-gray-400">or</p>
+            <button
+              type="button"
+              onClick={handleGuestCheckout}
+              className="w-full py-2 mt-2 rounded bg-green-600 hover:bg-green-500 transition duration-300 text-white"
+            >
+              Checkout as Guest
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
