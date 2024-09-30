@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
+const BillingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -96,4 +96,4 @@ const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
   );
 };
 
-export default ShippingForm;
+export default BillingForm;
