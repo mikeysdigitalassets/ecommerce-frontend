@@ -5,7 +5,7 @@ import PaymentForm from './PaymentForm'; // Stripe payment form component
 import ShippingForm from './ShippingForm'; // Shipping form component
 import BillingForm from './BillingForm'; // Billing form component
 
-const stripePromise = loadStripe('your_test_stripe_public_key'); // Replace with your Stripe public key
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
   const [shippingInfo, setShippingInfo] = useState<any>(null);
@@ -14,20 +14,28 @@ const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
 
   const handleShippingSubmit = (info: any) => {
     setShippingInfo(info);
+    console.log('Shipping Info Submitted:', info); // Debugging Log
   };
 
   const handleBillingSubmit = (info: any) => {
     setBillingInfo(info);
+    console.log('Billing Info Submitted:', info); // Debugging Log
   };
 
   const handleCheckboxChange = () => {
     setUseShippingAsBilling(!useShippingAsBilling);
-    if (!useShippingAsBilling) {
+    if (!useShippingAsBilling && shippingInfo) {
       setBillingInfo(shippingInfo); // Copy shipping info to billing info if checked
+      console.log('Using Shipping Info as Billing Info:', shippingInfo); // Debugging Log
     } else {
       setBillingInfo(null); // Clear billing info when unchecked
+      console.log('Cleared Billing Info'); // Debugging Log
     }
   };
+
+  // Debug log to ensure shippingInfo and billingInfo are populated correctly
+  console.log('Checkout Shipping Info:', shippingInfo);
+  console.log('Checkout Billing Info:', billingInfo);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md">

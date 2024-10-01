@@ -16,7 +16,8 @@ const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    console.log('Shipping Form Submitted:', formData); // Debugging log
+    onSubmit(formData); // Submit form data to parent component
   };
 
   return (
@@ -92,6 +93,10 @@ const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
           className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
         />
       </div>
+
+      <button type="submit" className="mt-4 bg-blue-600 text-white p-2 rounded">
+        Submit Shipping Info
+      </button>
     </form>
   );
 };

@@ -10,30 +10,33 @@ const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billing
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!stripe || !elements) {
       return; // Stripe.js hasn't loaded yet
     }
-
+  
     setIsProcessing(true);
-
-    // get CardElement from Stripe.js
+  
     const cardElement = elements.getElement(CardElement);
-
+    if (!cardElement) {
+      setErrorMessage('Card details are missing');
+      return;
+    }
+  
     try {
-      // Call your backend to create a PaymentIntent
-      const { data } = await axios.post('http://localhost:5000/api/payment/create-payment-intent', {
-        amount: 2000, // Replace with the actual amount in cents
-      },
-      {
-        withCredentials: true,
-      });
-    
-      const clientSecret = data.clientSecret;  // Extract clientSecret from the response
-    
-      console.log('Client Secret:', clientSecret);
-    
-      // Confirm the card payment using the client secret from the backend
+      const response = await axios.post(
+        'http://localhost:5000/api/payment/create-payment-intent',
+        { amount: 2000 },
+        { withCredentials: true }
+      );
+  
+      const clientSecret = response.data.client_secret;
+  
+      if (!clientSecret) {
+        setErrorMessage('Failed to retrieve client secret.');
+        return;
+      }
+  
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: cardElement!,
@@ -49,24 +52,24 @@ const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billing
           },
         },
       });
-    
+  
       if (error) {
-        console.error('Stripe Error:', error.message);
         setErrorMessage(error.message || 'An error occurred while processing the payment.');
       } else if (paymentIntent?.status === 'succeeded') {
-        // Payment was successful
+        // Payment successful, clear the cart
+        await axios.post('/api/cart/clear', {}, { withCredentials: true });
         console.log('Payment successful!', paymentIntent);
-        alert('Payment successful!');
+        alert('Payment successful! Your cart has been cleared.');
       }
     } catch (error) {
-      console.error('Payment processing error:', error);
       setErrorMessage('Failed to process payment.');
-    }
-    
-     finally {
+    } finally {
       setIsProcessing(false);
     }
   };
+  
+  
+  
 
   return (
     <form onSubmit={handlePayment} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
