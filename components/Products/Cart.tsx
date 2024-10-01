@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+
 
 type CartItem = {
   id: number;
@@ -24,6 +26,11 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
       }, {} as { [key: number]: number })
   );
 
+
+
+
+
+  
   const router = useRouter();
   const [userCheck, setUserCheck] = useState<boolean>();
 
@@ -37,6 +44,9 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   }, [cartItems]);
 
   const handleRemove = (productId: number, quantityToRemove: number) => {
+    console.log("Product ID:", productId);
+    console.log("Quantity to Remove:", quantityToRemove);
+    
     setCartItems((prevItems) => {
       const updatedCart = prevItems
         .map((item) => {
@@ -50,26 +60,42 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
           return item;
         })
         .filter((item) => item !== null) as CartItem[]; 
-
+  
       localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // save cart to loc storage
       return updatedCart;
     });
+  
+    // Make the backend call to remove the item
+    axios.delete("http://localhost:5000/api/cart/remove", {
+      data: { userId: user.id, productId, quantityToRemove },
+      withCredentials: true
+    })
+    .then(response => console.log("Item removed:", response))
+    .catch(error => console.error("Error removing item from cart:", error));
   };
+  
+  
+  
+  
 
   const handleQuantityChange = (productId: number, newQuantity: number) => {
-    if (newQuantity >= 1) {
-      setQuantitiesToRemove((prevQuantities) => ({
-        ...prevQuantities,
-        [productId]: newQuantity,
-      }));
-    }
+    setQuantitiesToRemove((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: newQuantity,
+    }));
   };
+  
 
   const calculateTotal = (): string => {
     return cartItems
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
+      .reduce((total, item) => {
+        const price = item.price ?? 0; // Default to 0 if undefined or null
+        const quantity = item.quantity ?? 1; // Default to 1 if undefined or null
+        return total + price * quantity;
+      }, 0)
+      .toFixed(2); // Ensuring it's a number before calling toFixed
   };
+  
 
   const handleCheckout = () => {
     if (user) {
@@ -78,6 +104,24 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
       router.push("/login?checkout=true"); // If the user is not logged in, pass `checkout=true` to the login page
     }
   };
+  
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/cart/${user.id}`, {
+          withCredentials: true
+        });
+        setCartItems(response.data); // Set the fetched cart items
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+  
+    if (user) {
+      fetchCartItems(); // Fetch cart items only if the user is logged in
+    }
+  }, [user, setCartItems]); // Run this effect when the component mounts or when the user changes
   
 
   return (
@@ -109,8 +153,9 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
                 />
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
-                  <p className="text-gray-500 mt-1">Price: ${item.price.toFixed(2)}</p>
-                  <p className="text-gray-500 mt-1">Cart Quantity: {item.quantity}</p>
+                  <p className="text-gray-500 mt-1">Price: ${item.price?.toFixed(2) ?? 'N/A'}</p>
+                  <p className="text-gray-500 mt-1">Cart Quantity: {item.quantity ?? 'N/A'}</p>
+
 
                   
                   <div className="flex items-center mt-3">
