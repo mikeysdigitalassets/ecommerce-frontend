@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 type CartItem = {
-  id: number;
+  productId: number;
   name: string;
   price: number;
   quantity: number;
@@ -21,7 +21,7 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   const [quantitiesToRemove, setQuantitiesToRemove] = useState<{ [key: number]: number }>(
     () =>
       cartItems.reduce((acc, item) => {
-        acc[item.id] = 1; // sets default quantity to 1
+        acc[item.productId] = 1; // sets default quantity to 1
         return acc;
       }, {} as { [key: number]: number })
   );
@@ -32,62 +32,42 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
 
   
   const router = useRouter();
-  const [userCheck, setUserCheck] = useState<boolean>();
+  
 
   useEffect(() => {
     const updatedQuantities = cartItems.reduce((acc, item) => {
-      acc[item.id] = quantitiesToRemove[item.id] || 1; // sets the default quant to 1
+      acc[item.productId] = quantitiesToRemove[item.productId] || 1; // sets the default quant to 1
       return acc;
     }, {} as { [key: number]: number });
 
     setQuantitiesToRemove(updatedQuantities);
   }, [cartItems]);
 
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/cart/${user.id}`, {
-          withCredentials: true
-        });
-        setCartItems(response.data);
-        console.log(cartItems); 
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    };
-  
-    if (user) {
-      fetchCartItems(); // Fetch cart items only if the user is logged in
-    }
-  }, [user, setCartItems]); // Run this effect when the component mounts or when the user changes
-
-
-
   const handleRemove = (productId: number, quantityToRemove: number) => {
     console.log("Product ID:", productId);
     console.log("Quantity to Remove:", quantityToRemove);
     
-    // setCartItems((prevItems) => {
-    //   const updatedCart = prevItems
-    //     .map((item) => {
-    //       if (item.id === productId) {
-    //         const newQuantity = item.quantity - quantityToRemove;
-    //         if (newQuantity > 0) {
-    //           return { ...item, quantity: newQuantity };
-    //         }
-    //         return null; 
-    //       }
-    //       return item;
-    //     })
-    //     .filter((item) => item !== null) as CartItem[]; 
+    setCartItems((prevItems) => {
+      const updatedCart = prevItems
+        .map((item) => {
+          if (item.productId === productId) {
+            const newQuantity = item.quantity - quantityToRemove;
+            if (newQuantity > 0) {
+              return { ...item, quantity: newQuantity };
+            }
+            return null; 
+          }
+          return item;
+        })
+        .filter((item) => item !== null) as CartItem[]; 
   
-    //   localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // save cart to loc storage
-    //   return updatedCart;
-    // });
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // save cart to loc storage
+      return updatedCart;
+    });
   
     // Make the backend call to remove the item
     axios.delete("http://localhost:5000/api/cart/remove", {
-      data: { userId: user.id, productId, quantityToRemove },
+      data: { userId: user.id,  productId  , quantityToRemove },
       withCredentials: true
     })
     .then(response => console.log("Item removed:", response))
@@ -98,10 +78,10 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   
   
 
-  const handleQuantityChange = (productId: number, newQuantity: number) => {
+  const handleQuantityChange = (id: number, newQuantity: number) => {
     setQuantitiesToRemove((prevQuantities) => ({
       ...prevQuantities,
-      [productId]: newQuantity,
+      [id]: newQuantity,
     }));
   };
   
@@ -126,7 +106,22 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   };
   
 
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/cart/${user.id}`, {
+          withCredentials: true
+        });
+        setCartItems(response.data); // Set the fetched cart items
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
   
+    if (user) {
+      fetchCartItems(); // Fetch cart items only if the user is logged in
+    }
+  }, [user, setCartItems]); // Run this effect when the component mounts or when the user changes
   
 
   return (
@@ -147,7 +142,7 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 justify-items-center">
             {cartItems.map((item) => (
               <div
-                key={item.id}
+                key={item.productId}
                 className="bg-white shadow-md rounded-md overflow-hidden transition transform hover:scale-105 hover:shadow-lg"
                 style={{ maxWidth: "240px", margin: "0 auto" }}
               >
@@ -165,7 +160,7 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
                   
                   <div className="flex items-center mt-3">
                     <button
-                      onClick={() => handleQuantityChange(item.id, quantitiesToRemove[item.id] - 1)}
+                      onClick={() => handleQuantityChange(item.productId, quantitiesToRemove[item.productId] - 1)}
                       className="px-2 py-1 bg-gray-300 rounded-l hover:bg-gray-400 transition"
                     >
                       -
@@ -173,14 +168,14 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
                     <input
                       type="number"
                       min="1"
-                      value={quantitiesToRemove[item.id]}
+                      value={quantitiesToRemove[item.productId]}
                       onChange={(e) =>
-                        handleQuantityChange(item.id, parseInt(e.target.value))
+                        handleQuantityChange(item.productId, parseInt(e.target.value))
                       }
                       className="w-12 text-center border-t border-b border-gray-300"
                     />
                     <button
-                      onClick={() => handleQuantityChange(item.id, quantitiesToRemove[item.id] + 1)}
+                      onClick={() => handleQuantityChange(item.productId, quantitiesToRemove[item.productId] + 1)}
                       className="px-2 py-1 bg-gray-300 rounded-r hover:bg-gray-400 transition"
                     >
                       +
@@ -188,11 +183,11 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
                   </div>
 
                   <button
-                    onClick={() => handleRemove(item.id, quantitiesToRemove[item.id])}
-                    className="mt-3 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
-                  >
+                    onClick={() => handleRemove(item.productId, quantitiesToRemove[item.productId])}  // Use item.productId instead of item.productId
+                    className="mt-3 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition">
                     Remove
                   </button>
+
                 </div>
               </div>
             ))}
