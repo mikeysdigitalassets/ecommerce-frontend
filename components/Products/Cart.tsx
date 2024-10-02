@@ -43,27 +43,47 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
     setQuantitiesToRemove(updatedQuantities);
   }, [cartItems]);
 
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/cart/${user.id}`, {
+          withCredentials: true
+        });
+        setCartItems(response.data);
+        console.log(cartItems); 
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+  
+    if (user) {
+      fetchCartItems(); // Fetch cart items only if the user is logged in
+    }
+  }, [user, setCartItems]); // Run this effect when the component mounts or when the user changes
+
+
+
   const handleRemove = (productId: number, quantityToRemove: number) => {
     console.log("Product ID:", productId);
     console.log("Quantity to Remove:", quantityToRemove);
     
-    setCartItems((prevItems) => {
-      const updatedCart = prevItems
-        .map((item) => {
-          if (item.id === productId) {
-            const newQuantity = item.quantity - quantityToRemove;
-            if (newQuantity > 0) {
-              return { ...item, quantity: newQuantity };
-            }
-            return null; 
-          }
-          return item;
-        })
-        .filter((item) => item !== null) as CartItem[]; 
+    // setCartItems((prevItems) => {
+    //   const updatedCart = prevItems
+    //     .map((item) => {
+    //       if (item.id === productId) {
+    //         const newQuantity = item.quantity - quantityToRemove;
+    //         if (newQuantity > 0) {
+    //           return { ...item, quantity: newQuantity };
+    //         }
+    //         return null; 
+    //       }
+    //       return item;
+    //     })
+    //     .filter((item) => item !== null) as CartItem[]; 
   
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // save cart to loc storage
-      return updatedCart;
-    });
+    //   localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // save cart to loc storage
+    //   return updatedCart;
+    // });
   
     // Make the backend call to remove the item
     axios.delete("http://localhost:5000/api/cart/remove", {
@@ -106,22 +126,7 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   };
   
 
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/cart/${user.id}`, {
-          withCredentials: true
-        });
-        setCartItems(response.data); // Set the fetched cart items
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    };
   
-    if (user) {
-      fetchCartItems(); // Fetch cart items only if the user is logged in
-    }
-  }, [user, setCartItems]); // Run this effect when the component mounts or when the user changes
   
 
   return (

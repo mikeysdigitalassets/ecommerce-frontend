@@ -48,8 +48,10 @@ const ProductList = () => {
     try {
       const payload = {
         userId: user.id,  // Use the user ID from the context
+        name: product.name,
         productId: product.id,
         quantity: quantity,
+        price: product.price
       };
 
       console.log("Payload being sent to the backend:", payload); // Debugging log
