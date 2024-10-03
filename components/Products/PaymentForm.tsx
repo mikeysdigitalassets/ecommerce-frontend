@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios'; 
+import { useUser } from "../Context/UserContext";
 
 const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billingInfo: any }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const { user } = useUser();
   const [errorMessage, setErrorMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -55,11 +57,14 @@ const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billing
   
       if (error) {
         setErrorMessage(error.message || 'An error occurred while processing the payment.');
-      } else if (paymentIntent?.status === 'succeeded') {
+      } else if (user && paymentIntent?.status === 'succeeded') {
         // on sucessfull payment transaction clear the cart
-        await axios.post('/api/cart/clear', {}, { withCredentials: true });
+        await axios.post('http://localhost:5000/api/cart/clear', null , { 
+          params: {userId: user.id},
+          withCredentials: true, 
+        });
         console.log('Payment successful!', paymentIntent);
-        alert('Payment successful! Your cart has been cleared.');
+        alert('Payment successful!');
       }
     } catch (error) {
       setErrorMessage('Failed to process payment.');
