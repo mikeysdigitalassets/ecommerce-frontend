@@ -5,7 +5,7 @@ type StatusBannerProps = {
   type: 'success' | 'error'; 
   onClose: () => void; 
 };
-
+// for success on product and cart functionality
 const StatusBanner = ({ message, type, onClose }: StatusBannerProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {

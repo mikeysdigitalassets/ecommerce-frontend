@@ -6,10 +6,7 @@ import { useUser } from "../Context/UserContext";
 import { toast, ToastOptions, TypeOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// interface RegisterProps {
-//   user: User | null; // Adjust this type according to your actual user object structure
-//   setUser: (user: User | null) => void;
-// }
+
 
 const Register = ({  }) => {
   const [username, setUsername] = useState<string>("");
@@ -44,11 +41,11 @@ const Register = ({  }) => {
       if (response.status === 200) {
         setSuccess("Registration successful");
         setError(null);
-        setUser(response.data); // Set user data if needed
+        setUser(response.data); 
         router.push("/login");
         notify('Registration successful!', 'success');
       }
-    } catch (err: any) { // 'any' type for catching different errors
+    } catch (err: any) { 
       if (err.response && err.response.status === 400) {
         setError(err.response.data);
       } else {

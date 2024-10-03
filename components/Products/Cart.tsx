@@ -17,7 +17,7 @@ type CartProps = {
 };
 
 const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
-  // initialize quantities for each product in the cart
+  
   const [quantitiesToRemove, setQuantitiesToRemove] = useState<{ [key: number]: number }>(
     () =>
       cartItems.reduce((acc, item) => {
@@ -65,7 +65,7 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
       return updatedCart;
     });
   
-    // Make the backend call to remove the item
+    // call to backend to remove item from cart
     axios.delete("http://localhost:5000/api/cart/remove", {
       data: { userId: user.id,  productId  , quantityToRemove },
       withCredentials: true
@@ -89,19 +89,19 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
   const calculateTotal = (): string => {
     return cartItems
       .reduce((total, item) => {
-        const price = item.price ?? 0; // Default to 0 if undefined or null
-        const quantity = item.quantity ?? 1; // Default to 1 if undefined or null
+        const price = item.price ?? 0; // 0 if undefined or null
+        const quantity = item.quantity ?? 1; // 1 if undefined or null
         return total + price * quantity;
       }, 0)
-      .toFixed(2); // Ensuring it's a number before calling toFixed
+      .toFixed(2); 
   };
   
 
   const handleCheckout = () => {
     if (user) {
-      router.push("/checkout"); // If the user is logged in, redirect to checkout
+      router.push("/checkout"); // if its a logged in user redirect to checkout
     } else {
-      router.push("/login?checkout=true"); // If the user is not logged in, pass `checkout=true` to the login page
+      router.push("/login?checkout=true"); // if not logged in pass `checkout=true` to the login page with option to checkout as guest
     }
   };
   
@@ -112,16 +112,16 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
         const response = await axios.get(`http://localhost:5000/api/cart/${user.id}`, {
           withCredentials: true
         });
-        setCartItems(response.data); // Set the fetched cart items
+        setCartItems(response.data); 
       } catch (error) {
         console.error("Error fetching cart items:", error);
       }
     };
   
     if (user) {
-      fetchCartItems(); // Fetch cart items only if the user is logged in
+      fetchCartItems(); // get cart items only if the user is logged in
     }
-  }, [user, setCartItems]); // Run this effect when the component mounts or when the user changes
+  }, [user, setCartItems]); 
   
 
   return (
@@ -183,7 +183,7 @@ const Cart = ({ cartItems, setCartItems, user }: CartProps) => {
                   </div>
 
                   <button
-                    onClick={() => handleRemove(item.productId, quantitiesToRemove[item.productId])}  // Use item.productId instead of item.productId
+                    onClick={() => handleRemove(item.productId, quantitiesToRemove[item.productId])}  // remeber to use item.productId for backend matching, you keep forgetting this
                     className="mt-3 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition">
                     Remove
                   </button>

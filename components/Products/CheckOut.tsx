@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import PaymentForm from './PaymentForm'; // Stripe payment form component
-import ShippingForm from './ShippingForm'; // Shipping form component
-import BillingForm from './BillingForm'; // Billing form component
+import PaymentForm from './PaymentForm'; 
+import ShippingForm from './ShippingForm'; 
+import BillingForm from './BillingForm'; 
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
   const [shippingInfo, setShippingInfo] = useState<any>(null);
   const [billingInfo, setBillingInfo] = useState<any>(null);
-  const [useShippingAsBilling, setUseShippingAsBilling] = useState(false); // Checkbox state
+  const [useShippingAsBilling, setUseShippingAsBilling] = useState(false); 
 
   const handleShippingSubmit = (info: any) => {
     setShippingInfo(info);
-    console.log('Shipping Info Submitted:', info); // Debugging Log
+    console.log('Shipping Info Submitted:', info); // keeping these logging just incase, setting up the shipping/billing functionality was a pain
   };
 
   const handleBillingSubmit = (info: any) => {
     setBillingInfo(info);
-    console.log('Billing Info Submitted:', info); // Debugging Log
+    console.log('Billing Info Submitted:', info); 
   };
 
   const handleCheckboxChange = () => {
     setUseShippingAsBilling(!useShippingAsBilling);
     if (!useShippingAsBilling && shippingInfo) {
-      setBillingInfo(shippingInfo); // Copy shipping info to billing info if checked
-      console.log('Using Shipping Info as Billing Info:', shippingInfo); // Debugging Log
+      setBillingInfo(shippingInfo); // copies shipping info into billing info if checked
+      console.log('Using Shipping Info as Billing Info:', shippingInfo); // more logging ill keep for shipping/billing info incase issues in the future
     } else {
-      setBillingInfo(null); // Clear billing info when unchecked
-      console.log('Cleared Billing Info'); // Debugging Log
+      setBillingInfo(null); // this clears the billing form when checked
+      // console.log('Cleared Billing Info');  logging i no longer need but will have // just incase
     }
   };
 
-  // Debug log to ensure shippingInfo and billingInfo are populated correctly
+  // log to show billing/shipping filled out correctly, will keep just in case
   console.log('Checkout Shipping Info:', shippingInfo);
   console.log('Checkout Billing Info:', billingInfo);
 
@@ -41,13 +41,13 @@ const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md">
       <h1 className="text-3xl font-bold text-center mb-8">Checkout</h1>
 
-      {/* Shipping Information */}
+      {/* this is for shipping info */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Enter Your Shipping Address</h2>
         <ShippingForm onSubmit={handleShippingSubmit} />
       </div>
 
-      {/* Billing Information */}
+      {/* this is for billing info */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Billing Information</h2>
         <label className="inline-flex items-center mb-4">
@@ -62,7 +62,7 @@ const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
         {!useShippingAsBilling && <BillingForm onSubmit={handleBillingSubmit} />}
       </div>
 
-      {/* Payment Information */}
+      {/* payment info */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Payment Information</h2>
         <Elements stripe={stripePromise}>

@@ -15,7 +15,7 @@ console.log('Total Items in Cart:', totalItems);
 
   return (
     <aside className="bg-gray-800 text-white w-64 h-screen fixed top-0 left-0 p-4">
-      
+      {/* may add visibility for links depending on user status user or !user */}
       <nav className="flex flex-col">
         <Link href="/">
           <span className="block py-3 px-4 rounded-lg bg-gray-700 shadow-md hover:bg-gray-600 transition duration-300">

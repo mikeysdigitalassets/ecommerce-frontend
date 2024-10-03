@@ -1,15 +1,15 @@
-import React from "react";
+// import React from "react";
 
-const Orders = () => {
+// const Orders = () => {
+
+    // dont really need this anymore, went a different direction, may use for a different component
+//     return (
+//         <div>
+//             lorem ipsum
+//         </div>
+//     )
 
 
-    return (
-        <div>
-            lorem ipsum
-        </div>
-    )
+// }
 
-
-}
-
-export default Orders;
+// export default Orders;

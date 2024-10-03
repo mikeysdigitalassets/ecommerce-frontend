@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import axios from 'axios'; // For making API calls to your backend
+import axios from 'axios'; 
 
 const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billingInfo: any }) => {
   const stripe = useStripe();
@@ -12,7 +12,7 @@ const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billing
     e.preventDefault();
   
     if (!stripe || !elements) {
-      return; // Stripe.js hasn't loaded yet
+      return; // stripe hasnt loaded yet
     }
   
     setIsProcessing(true);
@@ -56,7 +56,7 @@ const PaymentForm = ({ shippingInfo, billingInfo }: { shippingInfo: any; billing
       if (error) {
         setErrorMessage(error.message || 'An error occurred while processing the payment.');
       } else if (paymentIntent?.status === 'succeeded') {
-        // Payment successful, clear the cart
+        // on sucessfull payment transaction clear the cart
         await axios.post('/api/cart/clear', {}, { withCredentials: true });
         console.log('Payment successful!', paymentIntent);
         alert('Payment successful! Your cart has been cleared.');

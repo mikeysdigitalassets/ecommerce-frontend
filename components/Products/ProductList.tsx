@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import StatusBanner from "../Structure/StatusBanner";
-import { useUser } from "../Context/UserContext";  // Import the useUser hook
+import { useUser } from "../Context/UserContext";  // this is user hook, used to get info of user
 
 type Product = {
   id: number;
-  name: string;
+  name: string; // forgot to put name and price in backend cartItem DTO so orders in the cart were missing that info, added now
   price: number;
   quantity: number;
 };
 
 const ProductList = () => {
-  const { user } = useUser();  // Get the user from context
+  const { user } = useUser();  
   const [products, setProducts] = useState<Product[]>([]);
   const [bannerMessage, setBannerMessage] = useState<string>("");
   const [bannerType, setBannerType] = useState<'success' | 'error'>('success');
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
-  const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // Track quantities per product
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // remember that this tracks the number of products
   const api = 'http://localhost:5000/api/products';
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const ProductList = () => {
         console.log('Fetched products:', response.data);
         setProducts(response.data);
         const initialQuantities = response.data.reduce((acc: { [key: number]: number }, product: Product) => {
-          acc[product.id] = 1; // Default quantity to 1
+          acc[product.id] = 1; // product quantity to 1
           return acc;
         }, {});
         setQuantities(initialQuantities);
@@ -47,14 +47,14 @@ const ProductList = () => {
 
     try {
       const payload = {
-        userId: user.id,  // Use the user ID from the context
+        userId: user.id,  // using the user id from the user context, nessary for interacting with cart functionality
         productId: product.id,
         quantity: quantity,
         price: product.price,
         name: product.name
       };
 
-      console.log("Payload being sent to the backend:", payload); // Debugging log
+      console.log("Payload being sent to the backend:", payload); // log i will keep just incase
 
       await axios.post('http://localhost:5000/api/cart/add', payload, { withCredentials: true });
 
@@ -72,7 +72,7 @@ const ProductList = () => {
   const handleQuantityChange = (productId: number, newQuantity: number) => {
     setQuantities(prevQuantities => ({
       ...prevQuantities,
-      [productId]: newQuantity
+      [productId]: newQuantity   // do not mess with this function, you keep confusing yourself, you have this working just fine
     }));
   };
 

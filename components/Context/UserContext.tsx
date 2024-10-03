@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 
-// Update User type to include id (or userId)
+
 type User = {
-  id: number;  // Add the user ID field here
+  id: number;  
   username: string;
   email: string;
 };
@@ -23,7 +23,7 @@ export const useUser = () => {
 };
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Ensure user has id, username, and email
+ 
   const [user, setUser] = useState<User | null>(null);
 
   return (

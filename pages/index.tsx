@@ -1,7 +1,7 @@
 import React from 'react';
 import Home from '../components/Structure/Home'; 
 
-const IndexPage: React.FC = () => {
+const IndexPage = () => {
   return (
     <div>
       <Home  /> 

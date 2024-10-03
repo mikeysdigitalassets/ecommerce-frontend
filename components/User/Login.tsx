@@ -9,16 +9,16 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [showGuestCheckout, setShowGuestCheckout] = useState<boolean>(false); // New state for showing guest checkout
+  const [showGuestCheckout, setShowGuestCheckout] = useState<boolean>(false); // this is the state for showing guest checkout option
   const router = useRouter();
   const { setUser } = useUser(); 
 
   useEffect(() => {
-    // Check if the URL has `checkout=true` in the query parameters
+    // check for true in the parameters
     if (router.query.checkout === 'true') {
-      setShowGuestCheckout(true); // Show the "Checkout as Guest" button
+      setShowGuestCheckout(true); // if its true shows the login with the checkout as guest option included
     } else {
-      setShowGuestCheckout(false); // Do not show the "Checkout as Guest" button
+      setShowGuestCheckout(false); // does not show checkout as guest option on login
     }
   }, [router.query.checkout]);
 
@@ -62,9 +62,9 @@ const Login = () => {
     }
   };
 
-  // Handler for guest checkout
+  // guest checkout handler
   const handleGuestCheckout = () => {
-    router.push("/checkout/guest"); // Redirect to a guest checkout flow
+    router.push("/checkout/guest"); // redirects for checkout
   };
 
   return (
@@ -101,7 +101,7 @@ const Login = () => {
           Log in!
         </button>
 
-        {/* Conditionally show the "Checkout as Guest" button */}
+        {/* this is the conditional for showing checkout as guest option */}
         {showGuestCheckout && (
           <div className="text-center mt-6">
             <p className="text-gray-400">or</p>
