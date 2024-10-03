@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link"; 
 import axios from "axios";
 import { useRouter } from "next/router"; 
@@ -11,13 +11,25 @@ import 'react-toastify/dist/ReactToastify.css';
 const Header = () => {
   const { user, setUser } = useUser();
   const router = useRouter(); 
+  const [formData, setFormData] = useState({
+    search: ''});
 
   const notify = (message: string, type: TypeOptions) => {
     const options: ToastOptions = { type, autoClose: 5000};
     toast(message, options);
   }
 
+  const handleSearch = async () => {
+    if (!formData.search) return; // Ensure the user has typed something
+    router.push(`/search-results?query=${formData.search}`);
+    setFormData({
+      search: ''});
+  };
+  
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleLogout = async () => {
     try {
@@ -38,6 +50,7 @@ const Header = () => {
     }
   };
   
+
   return (
     <header className="bg-gray-800 text-white w-full fixed top-0 left-0 z-10 h-16 flex items-center">
       <div className="flex justify-between items-center w-full px-4">
@@ -74,11 +87,22 @@ const Header = () => {
         <div className="relative">
           <input
             type="text"
+            name="search"
+            value={formData.search}
+            onChange={handleChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch(); 
+              }
+            }}
             placeholder="Search..."
             className="pl-4 pr-12 py-2 rounded-full bg-gray-700 text-white placeholder-gray-400 focus:outline-none w-56"
           />
-          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+            onClick={handleSearch}
+            >
             🔍
+            
           </button>
         </div>
       </div>
