@@ -16,7 +16,7 @@ const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Shipping Form Submitted:', formData); // log i will keep for my sanity
+    console.log('Shipping Form Submitted:', formData,); // log i will keep for my sanity
     onSubmit(formData); // submits the form to parent
   };
 
