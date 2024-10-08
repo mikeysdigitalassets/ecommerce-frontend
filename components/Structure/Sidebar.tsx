@@ -8,6 +8,7 @@ import { useCart, CartProvider } from '../Context/CartContext';
 
 const Sidebar = () => {
   const { cartItems } = useCart(); 
+  const { user } = useUser();
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0); 
 
   console.log('Cart Items:', cartItems); 
@@ -38,16 +39,22 @@ console.log('Total Items in Cart:', totalItems);
             )}
           </span>
         </Link>
-        <Link href="/profile">
+        {/* <Link href="/profile">
           <span className="block py-3 px-4 mt-3 rounded-lg bg-gray-700 shadow-md hover:bg-gray-600 transition duration-300">
             Profile
           </span>
-        </Link>
-        <Link href="/settings">
+        </Link> */}
+        {user ? 
+          <>
+          <Link href="/settings">
           <span className="block py-3 px-4 mt-3 rounded-lg bg-gray-700 shadow-md hover:bg-gray-600 transition duration-300">
-            Settings
+            Account Settings
           </span>
         </Link>
+          </> :
+
+        null}
+        
       </nav>
     </aside>
   );

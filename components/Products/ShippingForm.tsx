@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
+  const [hideShipButton, setHideShipButton] = useState(false)
+  const [hideBillingBox, setHideBillingBox] = useState(true)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -18,6 +20,8 @@ const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
     e.preventDefault();
     console.log('Shipping Form Submitted:', formData,); // log i will keep for my sanity
     onSubmit(formData); // submits the form to parent
+    setHideShipButton(true);
+    setHideBillingBox(false);
   };
 
   return (
@@ -93,10 +97,15 @@ const ShippingForm = ({ onSubmit }: { onSubmit: (info: any) => void }) => {
           className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
         />
       </div>
-
-      <button type="submit" className="mt-4 bg-blue-600 text-white p-2 rounded">
+      {hideShipButton == false ? 
+        <>
+        <button type="submit" className="mt-4 bg-blue-600 text-white p-2 rounded">
         Submit Shipping Info
-      </button>
+        </button> 
+        </> 
+        :
+        null}
+      
     </form>
   );
 };

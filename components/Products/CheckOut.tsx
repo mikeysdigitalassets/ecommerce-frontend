@@ -11,10 +11,12 @@ const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
   const [shippingInfo, setShippingInfo] = useState<any>(null);
   const [billingInfo, setBillingInfo] = useState<any>(null);
   const [useShippingAsBilling, setUseShippingAsBilling] = useState(false); 
+  const [hideBillingBox, setHideBillingBox] = useState(true);
 
   const handleShippingSubmit = (info: any) => {
     setShippingInfo(info);
     console.log('Shipping Info Submitted:', info); // keeping these logging just incase, setting up the shipping/billing functionality was a pain
+    setHideBillingBox(false);
   };
 
   const handleBillingSubmit = (info: any) => {
@@ -50,7 +52,9 @@ const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
       {/* this is for billing info */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Billing Information</h2>
-        <label className="inline-flex items-center mb-4">
+        {hideBillingBox == false ? 
+          <>
+          <label className="inline-flex items-center mb-4">
           <input
             type="checkbox"
             checked={useShippingAsBilling}
@@ -59,6 +63,9 @@ const Checkout = ({ user, isLoggedIn }: { user: any; isLoggedIn: boolean }) => {
           />
           <span className="ml-2 text-gray-700">Use Shipping Info as Billing Info</span>
         </label>
+          </>  :
+          null }
+        
         {!useShippingAsBilling && <BillingForm onSubmit={handleBillingSubmit} />}
       </div>
 
