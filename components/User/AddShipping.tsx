@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useUser } from '../Context/UserContext';
 import axios from 'axios';
+import { useRouter } from "next/router"; 
+import { toast, ToastOptions, TypeOptions } from 'react-toastify';
 
 const AddShipping = () => {
   const { user } = useUser();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -12,6 +15,11 @@ const AddShipping = () => {
     state: '',
     zipCode: '',
   });
+
+  const notify = (message: string, type: TypeOptions) => {
+    const options: ToastOptions = { type, autoClose: 5000 }
+    toast(message, options);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,22 +32,26 @@ const AddShipping = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(
+     const response = await axios.post(
         "http://localhost:5000/api/user-settings/add-shipping",
         {
-          user: user.id,
-          shipping_address: formData.address,
+          user_id: user.id,
+          address: formData.address,
           city: formData.city,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           state: formData.state,
-          postal_code: formData.zipCode,
+          postalCode: formData.zipCode,
         },
         {
           withCredentials: true,
         }
       );
       console.log('Shipping Form Submitted:', formData); // log for debugging
+      if (response.status == 200) {
+        notify('Succesfully added shipping address!', 'success');
+        router.push("/settings")
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     }
